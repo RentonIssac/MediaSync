@@ -41,26 +41,27 @@ public class MainActivity extends Activity {
 
 	private final String IMAGE_TYPE = "image/*";
 	private final int IMAGE_CODE = 0;
-	
+
 	public static String UPLOAD_FILE_NAME = "";
-	
+
 	/******************************************************/
 	private ExpandableListView expandlistView;
 	private StatusExpandAdapter statusAdapter;
 	private Context context;
 	private int count = 0;
+
 	/******************************************************/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		context = this;
 		expandlistView = (ExpandableListView) findViewById(R.id.expandlist);
 		initExpandListView();
 	}
-	
+
 	/**
 	 * 初始化可拓展列表
 	 */
@@ -105,7 +106,7 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-	
+
 	private List<GroupStatusEntity> getListData() {
 		List<GroupStatusEntity> groupList;
 		String[] strArray = new String[] { "20140710", "20081201", "20150809" };
@@ -119,14 +120,14 @@ public class MainActivity extends Activity {
 						"你说长相不重要，是因为你长了一张就算刚睡醒也敢自拍的脸。你说成绩不重要，是因为你随随便便又不小心考了次年级前五。你说恋爱不重要，是因为你身边备胎多的可以摆四五桌麻将了。你说家境不重要，是因为你有一个看你皱一下眉就给你买新款的父母。你说健康不重要，是因为你不会半夜因为疼痛而翻来覆去咳得撕心裂肺。你说不重要不过是因为你已经拥有了，你说不重要不过是因为你从来不知道别人的努力和挣扎。",
 						"你永远不知道在你发了个“嗯”或者“哦”还能继续回复你的人，是有多在乎你！",
 						"最想说的话在眼睛里，草稿箱里，还有梦里" },
-				{ "那些花了好久才想明白的事，总是会被偶尔的情绪失控全部推翻。",
+				{		"那些花了好久才想明白的事，总是会被偶尔的情绪失控全部推翻。",
 						"折磨人的不是离别，而是感动的回忆，让人很容易站在原地还以为回得去", "敬往事一杯酒，再爱也不回头！",
 						"可以一杯滚水烫死我，也可以一杯冰水冷死我，但不能一杯温水耗着我，我要的是黑白分明直接利落" } };
 		groupList = new ArrayList<GroupStatusEntity>();
 		for (int i = 0; i < strArray.length; i++) {
 			GroupStatusEntity groupStatusEntity = new GroupStatusEntity();
 			groupStatusEntity.setGroupName(strArray[i]);
-		
+
 			List<ChildStatusEntity> childList = new ArrayList<ChildStatusEntity>();
 
 			for (int j = 0; j < childTimeArray[i].length; j++) {
@@ -191,7 +192,7 @@ public class MainActivity extends Activity {
 		if (resultCode == RESULT_OK) {
 
 			if (requestCode == IMAGE_CODE) {
-				
+
 				try {
 					Uri selectedImage = data.getData();
 					String wholeID = DocumentsContract
@@ -205,10 +206,9 @@ public class MainActivity extends Activity {
 					// where id is equal to
 					String sel = MediaStore.Images.Media._ID + "=?";
 
-					Cursor cursor = getContentResolver()
-							.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-									column, sel, new String[] { id },
-									null);
+					Cursor cursor = getContentResolver().query(
+							MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+							column, sel, new String[] { id }, null);
 
 					String filePath = "";
 
@@ -220,44 +220,40 @@ public class MainActivity extends Activity {
 					cursor.close();
 
 					Log.e("onActivityResult path", filePath);
-					
+
 					UPLOAD_FILE_NAME = filePath;
 
 				} catch (Exception e) {
 					Log.e("onActivityResult", e.toString());
 				}
-				
-				/*new Thread(new Runnable() {
-					@Override
-					public void run() {
-						File myFile = new File(UPLOAD_FILE_NAME);
-						//FileImageUpload.uploadFile(myFile, "http://168.168.1.26:8000/upload_json/");
-						RequestParams params = new RequestParams();
-						try {
-							params.put("mediafile", myFile);
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						}
-						params.put("owner", "renton");
-						
-						AsyncHttpClient client = new AsyncHttpClient();
-						client.post("http://168.168.1.26:8000/upload_json/", params, new AsyncHttpResponseHandler() {
 
-							@Override
-							public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-								Log.e("onActivityResult", "onFailure");
-							}
-
-							@Override
-							public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-								Log.e("onActivityResult", "onSuccess");
-							}
-							
-						});
-					}
-				}).start();*/
+				/*
+				 * new Thread(new Runnable() {
+				 * 
+				 * @Override public void run() { File myFile = new
+				 * File(UPLOAD_FILE_NAME); //FileImageUpload.uploadFile(myFile,
+				 * "http://168.168.1.26:8000/upload_json/"); RequestParams
+				 * params = new RequestParams(); try { params.put("mediafile",
+				 * myFile); } catch (FileNotFoundException e) {
+				 * e.printStackTrace(); } params.put("owner", "renton");
+				 * 
+				 * AsyncHttpClient client = new AsyncHttpClient();
+				 * client.post("http://168.168.1.26:8000/upload_json/", params,
+				 * new AsyncHttpResponseHandler() {
+				 * 
+				 * @Override public void onFailure(int statusCode, Header[]
+				 * headers, byte[] responseBody, Throwable error) {
+				 * Log.e("onActivityResult", "onFailure"); }
+				 * 
+				 * @Override public void onSuccess(int statusCode, Header[]
+				 * headers, byte[] responseBody) { Log.e("onActivityResult",
+				 * "onSuccess"); }
+				 * 
+				 * }); } }).start();
+				 */
 				File myFile = new File(UPLOAD_FILE_NAME);
-				//FileImageUpload.uploadFile(myFile, "http://168.168.1.26:8000/upload_json/");
+				// FileImageUpload.uploadFile(myFile,
+				// "http://168.168.1.26:8000/upload_json/");
 				RequestParams params = new RequestParams();
 				try {
 					params.put("mediafile", myFile);
@@ -265,40 +261,46 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 				params.put("owner", "renton");
-				
+
 				AsyncHttpClient client = new AsyncHttpClient();
-				client.post("http://168.168.1.26:8000/upload_json/", params, new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(int statusCode, Header[] headers, JSONObject response/*JSONArray response*/) {
+				client.post("http://168.168.1.26:8000/upload_json/", params,
+						new JsonHttpResponseHandler() {
+							@Override
+							public void onSuccess(int statusCode,
+									Header[] headers, JSONObject response/*
+																		 * JSONArray
+																		 * response
+																		 */) {
 
-						//super.onSuccess(statusCode, headers, response);
-						//if (statusCode == 200) {
-						if (statusCode == 200) {
-							/*
-							for (int i = 0; i < response.length(); i++) {
-								try {
-									JSONObject obj = response.getJSONObject(i);
-									int rc = obj.getInt("rc");
-									String msg = obj.getString("message");
+								// super.onSuccess(statusCode, headers,
+								// response);
+								// if (statusCode == 200) {
+								if (statusCode == 200) {
+									/*
+									 * for (int i = 0; i < response.length();
+									 * i++) { try { JSONObject obj =
+									 * response.getJSONObject(i); int rc =
+									 * obj.getInt("rc"); String msg =
+									 * obj.getString("message");
+									 * 
+									 * Log.e("response", "rc: " + rc + ", msg: "
+									 * + msg); } catch (JSONException e) {
+									 * e.printStackTrace(); } }
+									 */
 
-									Log.e("response", "rc: " + rc + ", msg: " + msg);
-								} catch (JSONException e) {
-									e.printStackTrace();
+									int rc;
+									String msg;
+									try {
+										rc = response.getInt("rc");
+										msg = response.getString("message");
+										Log.e("response", "rc: " + rc
+												+ ", msg: " + msg);
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
 								}
-							}*/
-							
-							int rc;
-							String msg;
-							try {
-								rc = response.getInt("rc");
-								msg = response.getString("message");
-								Log.e("response", "rc: " + rc + ", msg: " + msg);
-							} catch (JSONException e) {
-								e.printStackTrace();
 							}
-						}
-					}
-				});
+						});
 			}
 			super.onActivityResult(requestCode, resultCode, data);
 		}
